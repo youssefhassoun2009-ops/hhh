@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>English Quiz</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ✅ العلامة المائية كصورة */
+    .watermark {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      opacity: 0.05;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .quiz-box {
+      max-width: 600px;
+      width: 100%;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      z-index: 1;
+      position: relative;
+    }
+
+    .question {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .option {
+      padding: 0.8rem;
+      border: 2px solid #ccc;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .option:hover {
+      background-color: #f0f0f0;
+    }
+
+    .correct {
+      background-color: #c8f7c5;
+      border-color: #2ecc71;
+    }
+
+    .wrong {
+      background-color: #f7c5c5;
+      border-color: #e74c3c;
+    }
+
+    .result-label {
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .progress-circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: conic-gradient(#4caf50 0%, #ccc 0%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 1rem auto 2rem;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.8s ease 0.8s, transform 0.8s ease 0.8s;
+    }
+
+    .retry-btn {
+      display: block;
+      margin: 0 auto;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      opacity: 0;
+      transition: opacity 0.8s ease 1.6s;
+    }
+
+    .retry-btn:hover {
+      background-color: #1976D2;
+    }
+
+    .show {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (max-width: 600px) {
+      .quiz-box {
+        padding: 1rem;
+      }
+
+      .question {
+        font-size: 1rem;
+      }
+
+      .option {
+        font-size: 0.9rem;
+        padding: 0.6rem;
+      }
+
+      .progress-circle {
+        width: 150px;
+        height: 150px;
+        font-size: 1.5rem;
+      }
+    }
+
+    .box-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  transform: translate(-50%, -50%);
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 0;
+}
+.quiz-box {
+  position: relative; /* ضروري حتى تكون الصورة داخل المربع */
+  z-index: 1;
+}
+
+
+.sponsor-banner {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.4;
+}
+.sponsor-banner strong {
+  font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.social-icons a {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-block;
+  background-size: 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: transform 0.3s ease;
+}
+
+.social-icons a:hover {
+  transform: scale(1.1);
+}
+
+/* ✅ ألوان وأيقونات */
+.telegram {
+  background-color: #0088cc;
+  background-image: url('https://cdn-icons-png.flaticon.com/512/2111/2111646.png');
+}
+
+.facebook {
+  background-color: #3b5998;
+  background-image: url('https://cdn-icons-png.flaticon.com/512/733/733547.png');
+}
+
+.instagram {
+  background-color: #E1306C;
+  background-image: url('https://cdn-icons-png.flaticon.com/512/2111/2111463.png');
+}
+
+.whatsapp {
+  background-color: #25D366;
+  background-image: url('https://cdn-icons-png.flaticon.com/512/733/733585.png');
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  margin-top: 2rem;
+}
+
+.social-icons a img {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+.social-icons a:hover img {
+  transform: scale(1.1);
+}
+
+.sponsor-banner {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+.sponsor-banner strong {
+  font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+/* ✅ نسخة سفلية */
+.bottom-sponsor {
+  margin-top: 2rem;
+}
+  </style>
+</head>
+<body>
+  <!-- ✅ صورة العلامة المائية -->
+
+
+  <div class="quiz-box">
+    <div class="sponsor-banner">
+  <span>Sponsored by</span><br />
+  <strong>Bright minds academy</strong>
+</div>
+    <div id="quiz-container"></div>
+<img src="logo.png" alt="Watermark" class="box-watermark" />
+    <div id="result" style="display:none;">
+      <div class="result-label" id="label">نتيجتك هي</div>
+      <div class="progress-circle" id="circle">0%</div>
+      <button class="retry-btn" id="retry">إعادة الاختبار</button>
+    </div>
+
+    <div class="sponsor-banner bottom-sponsor">
+  <span>Sponsored by</span><br />
+  <strong>Bright minds academy</strong>
+</div>
+<div class="social-icons">
+  <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" /></a>
+  <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" /></a>
+  <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" /></a>
+  <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" /></a>
+</div>
+
+
+  </div>
+  <script>
+    const questions = [
+      { q: "I usually __ to the gym every day, but today I'm __ home because I'm tired.", a: ["go - staying", "go - am staying", "go - stay", "am going - to stay"], c: 1 },
+      { q: "The Earth ___ around the sun.", a: ["revolves", "is revolving", "will revolve", "Revolved"], c: 0 },
+      { q: "I___ to eat ice cream.", a: ["like", "am liking", "will like", "likes"], c: 0 },
+      { q: "She__ to music right now.", a: ["listens", "is listening", "will listen", "was listening"], c: 1 },
+      { q: "He___ at a bank.", a: ["works", "is working", "worked", "was working"], c: 0 },
+      { q: "They __ football at the moment.", a: ["play", "are playing", "played", "were playing"], c: 1 },
+      { q: "Water___ at 100 degrees Celsius.", a: ["boils", "is boiling", "was boiling", "boil"], c: 0 },
+      { q: "I___ you're wrong.", a: ["thinks", "am thinking", "think", "was thinking"], c: 2 },
+      { q: "She____ in God.", a: ["believes", "is believing", "believe", "was believing"], c: 0 },
+      { q: "She__ a doctor right now.", a: ["sees", "is seeing", "saw", "was seeing"], c: 1 },
+      { q: "They were talking when I___ the room.", a: ["enter", "entered", "was entering", "enters"], c: 1 },
+      { q: "While I was talking to the manager, someone___ into my office.", a: ["was walking", "were walking", "walked", "walk"], c: 2 },
+      { q: "We___ breakfast at 9:00 A.M yesterday.", a: ["had", "were having", "have", "are having"], c: 0 },
+      { q: "Yesterday, they___ to the park.", a: ["walked", "walk", "were walking", "are walking"], c: 0 },
+      { q: "Last week, he__ a new job.", a: ["starts", "started", "was starting", "will start"], c: 1 },
+      { q: "I bought a pair of ___ shoes.", a: ["New leather black", "black leather new", "New black leather", "Black new leather"], c: 2 },
+      { q: "The ___ car turned the corner.", a: ["Red American big", "American red big", "big red American", "big American red"], c: 2 },
+      { q: "She is a ___ woman.", a: ["beautiful young Australian", "Australian beautiful young", "young beautiful Australian", "young Australian beautiful"], c: 0 },
+      { q: "The___ desk is in the corner of the room.", a: ["French writing old", "old French writing", "writing French old", "writing old French"], c: 1 },
+      { q: "I ate a delicious round chocolate cake.", a: ["delicious round chocolate", "chocolate round delicious", "round chocolate delicious", "delicious chocolate round"], c: 0 }
+    ];
+
+    let current = 0;
+    let score = 0;
+    const container = document.getElementById("quiz-container");
+
+    function showQuestion() {
+      container.innerHTML = "";
+      const q = questions[current];
+      const qEl = document.createElement("div");
+      qEl.className = "question";
+      qEl.textContent = (current + 1) + ". " + q.q;
+
+      const opts = document.createElement("div");
+      opts.className = "options";
+
+      q.a.forEach((text, i) => {
+        const btn = document.createElement("div");
+        btn.className = "option";
+        btn.textContent = text;
+        btn.onclick = function () {
+          handleAnswer(i, q.c, btn, opts);
+        };
+        opts.appendChild(btn);
+      });
+
+      container.appendChild(qEl);
+      container.appendChild(opts);
+    }
+
+    function handleAnswer(selected, correct, btn, opts) {
+      const all = opts.querySelectorAll(".option");
+      all.forEach(function (b, i) {
+        b.classList.add(i === correct ? "correct" : "wrong");
+        b.style.pointerEvents = "none";
+      });
+
+      if (selected === correct) score += 5;
+
+      setTimeout(function () {
+        current++;
+        if (current < questions.length) {
+          showQuestion();
+        } else {
+          showResult();
+        }
+      }, 1200);
+    }
+
+    function showResult() {
+      container.style.display = "none";
+      const result = document.getElementById("result");
+      const label = document.getElementById("label");
+      const circle = document.getElementById("circle");
+      const retry = document.getElementById("retry");
+
+      result.style.display = "block";
+
+      let percent = score;
+      circle.textContent = percent + "%";
+      circle.style.background = "conic-gradient(#4caf50 " + percent + "%, #ccc " + percent + "%)";
+
+      label.classList.add("show");
+      circle.classList.add("show");
+      retry.classList.add("show");
+    }
+
+    document.getElementById("retry").addEventListener("click", () => {
+      location.reload();
+    });
+
+    showQuestion();
+  </script>
+</body>
+</html>
